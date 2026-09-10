@@ -1,6 +1,7 @@
 package com.krishu.caretracev2;
 
 import com.krishu.caretracev2.CustomExceptions.NotFoundException;
+import com.krishu.caretracev2.CustomExceptions.UnauthorizedException;
 import com.krishu.caretracev2.CustomExceptions.UserAlreadyExistsException;
 import com.krishu.caretracev2.DTO.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> NotFound(NotFoundException exp){
         ErrorResponse errorResponse=new ErrorResponse(404,exp.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> Unauthorized(UnauthorizedException exp){
+        ErrorResponse errorResponse=new ErrorResponse(401,exp.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }

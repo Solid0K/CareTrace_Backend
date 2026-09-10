@@ -2,9 +2,11 @@ package com.krishu.caretracev2.Service;
 
 import com.krishu.caretracev2.ClientRole;
 import com.krishu.caretracev2.CustomExceptions.NotFoundException;
+import com.krishu.caretracev2.CustomExceptions.UnauthorizedException;
 import com.krishu.caretracev2.CustomExceptions.UserAlreadyExistsException;
 import com.krishu.caretracev2.DTO.PatientMakingRequest;
 import com.krishu.caretracev2.DTO.PatientResponse;
+import com.krishu.caretracev2.DTO.PatientUpdateRequest;
 import com.krishu.caretracev2.Model.CareTaker;
 import com.krishu.caretracev2.Model.Client;
 import com.krishu.caretracev2.Model.Patient;
@@ -55,6 +57,31 @@ public class PatientService {
         careTaker.getPatientIds().add(savedPatient.getId());
         careTakerRepo.save(careTaker);
         return mapToPatientResponse(patient,newUser);
+    }
+
+    public PatientResponse getPatient(String patientId,Authentication authentication){
+        CareTaker careTaker=careTakerRepo.findByUserId(authentication.
+                getName()).orElseThrow(()->new NotFoundException("CareTaker not found"));
+        Patient patient=patientRepo.findById(patientId).orElseThrow(()->new NotFoundException("Patient not found"));
+        if(!patient.getCareTakerId().equals(careTaker.getId())){
+            throw new UnauthorizedException("You not allow to see this Patient");
+        }
+        Client patientUser=userRepo.findById(patient.getUserId()).orElseThrow(()->new NotFoundException("User not found"));
+        return mapToPatientResponse(patient,patientUser);
+    }
+
+    public PatientResponse updatePatient(String patientId, PatientUpdateRequest request,Authentication authentication){
+        CareTaker careTaker=careTakerRepo.findByUserId(authentication.
+                getName()).orElseThrow(()->new NotFoundException("CareTaker not found"));
+        Patient patient=patientRepo.findById(patientId).orElseThrow(()->new NotFoundException("Patient not found"));
+        if(!patient.getCareTakerId().equals(careTaker.getId())){
+            throw new UnauthorizedException("You not allow to see this Patient");
+        }
+        patient.setAge(request.getAge());
+        patient.setPreferred_language(request.getLanguage());
+        Patient savedPatient=patientRepo.save(patient);
+        Client patientUser=userRepo.findById(patient.getUserId()).orElseThrow(()->new NotFoundException("User not found"));
+        return mapToPatientResponse(savedPatient,patientUser);
     }
 
     private PatientResponse mapToPatientResponse(Patient patient,Client patientUser){
