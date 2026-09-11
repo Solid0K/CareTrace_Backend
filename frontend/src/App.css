@@ -385,3 +385,187 @@
   color: #526462;
   font-size: 17px;
 }
+
+/* TODOS PAGE */
+
+.todos-page {
+  min-height: 100dvh;
+  padding: 40px 60px;
+  background-color: #ffffff;
+}
+
+.todos-page > h1 {
+  margin: 0;
+  font-size: 36px;
+  color: #245c5a;
+}
+
+.todos-page > p {
+  margin-top: 8px;
+  margin-bottom: 32px;
+  font-size: 18px;
+  color: #526462;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 900px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border: 1px solid #e2e8e6;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 16px rgba(36, 92, 90, 0.06);
+}
+
+.todo-item h2 {
+  margin: 0;
+  font-size: 23px;
+  color: #263332;
+}
+
+.todo-item button {
+  padding: 14px 22px;
+  border: none;
+  border-radius: 12px;
+  background-color: #245c5a;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.todo-item button:hover {
+  opacity: 0.9;
+}
+
+/* ACTIVITIES PAGE */
+
+.activities-page {
+  min-height: 100dvh;
+  padding: 40px 60px;
+  background-color: #ffffff;
+}
+
+.activities-page > h1 {
+  margin: 0;
+  font-size: 36px;
+  color: #245c5a;
+}
+
+.activities-page > p {
+  margin-top: 8px;
+  margin-bottom: 32px;
+  font-size: 18px;
+  color: #526462;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+}
+
+.activity-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  border: 1px solid #e2e8e6;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 16px rgba(36, 92, 90, 0.06);
+}
+
+.activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  background-color: #eef7f5;
+  font-size: 34px;
+}
+
+.activity-info {
+  flex: 1;
+}
+
+.activity-info h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  color: #263332;
+}
+
+.activity-info p {
+  margin: 0;
+  color: #526462;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.activity-button {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  background-color: #245c5a;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.activity-button:hover {
+  opacity: 0.9;
+}
+
+/* MOBILE RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+
+  /* Patient Home */
+
+  .patient-dashboard {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100dvh - 70px);
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .assistant-panel {
+    min-height: 280px;
+    padding: 24px 18px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    gap: 16px;
+  }
+
+  .feature-card {
+    min-height: 150px;
+    padding: 24px;
+  }
+
+  /* Header */
+
+  .patient-header {
+    padding: 16px 20px;
+  }
+
+  .patient-header h1 {
+    font-size: 24px;
+  }
+}
