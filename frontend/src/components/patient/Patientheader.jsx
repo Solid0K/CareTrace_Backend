@@ -9,4 +9,4 @@ function Patientheader() {
   );
 }
 
-export default Patientheader;
+export default Patientheader; 
