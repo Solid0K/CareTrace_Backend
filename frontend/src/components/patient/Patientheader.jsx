@@ -4,9 +4,7 @@ function Patientheader() {
     <header className="patient-header">
       <h1>CARETRACE</h1>
 
-      <button className="caregiver-button">
-        👤
-      </button>
+      <button className="caregiver-button">👤</button>
     </header>
   );
 }
