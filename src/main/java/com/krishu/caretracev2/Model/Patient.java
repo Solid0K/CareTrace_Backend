@@ -18,4 +18,5 @@ public class Patient {
     private Integer age;
     private String preferred_language;
     private String careTakerId;
+    private String notes;
 }
