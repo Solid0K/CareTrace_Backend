@@ -1,6 +1,7 @@
 package com.krishu.caretracev2;
 
 import com.krishu.caretracev2.CustomExceptions.NotFoundException;
+import com.krishu.caretracev2.CustomExceptions.NotRelatedException;
 import com.krishu.caretracev2.CustomExceptions.UnauthorizedException;
 import com.krishu.caretracev2.CustomExceptions.UserAlreadyExistsException;
 import com.krishu.caretracev2.DTO.ErrorResponse;
@@ -34,6 +35,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> Unauthorized(UnauthorizedException exp){
         ErrorResponse errorResponse=new ErrorResponse(401,exp.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(NotRelatedException.class)
+    public ResponseEntity<ErrorResponse> NotRelated(NotRelatedException exp){
+        ErrorResponse errorResponse=new ErrorResponse(409,exp.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }
