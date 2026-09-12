@@ -70,7 +70,12 @@ public class ReminderService {
     }
 
     public void deleteReminder(String reminderId,String patientId,Authentication authentication){
-
+        CareTakerPatientPair pair=careTakerAndPatient(authentication,patientId);
+        Reminder reminder=reminderRepo.findById(reminderId).orElseThrow(()->new NotFoundException("Reminder not found"));
+        if(!reminder.getPatientId().equals(patientId)){
+            throw new NotRelatedException("Reminder does not belong to this Patient");
+        }
+        reminderRepo.delete(reminder);
     }
 
     private void validateReminder(String patientId, ReminderRequest request){
