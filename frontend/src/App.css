@@ -461,6 +461,7 @@
 
 .activities-page>h1 {
   margin: 0;
+  padding-bottom: 8px;
   font-size: 36px;
   color: #245c5a;
 }
