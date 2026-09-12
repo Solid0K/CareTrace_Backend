@@ -1,4 +1,4 @@
-import PatientHeader from "../../components/patient/PatientHeader";
+import PatientHeader from "../../components/patient/Patientheader";
 import HelpCard from "../../components/patient/HelpCard";
 import FeatureCard from "../../components/patient/FeatureCard";
 function PatientHome() {

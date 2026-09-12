@@ -1,12 +1,15 @@
+import { Link } from "react-router-dom";
 
-function Patientheader() {
+function PatientHeader() {
   return (
     <header className="patient-header">
       <h1>CARETRACE</h1>
 
-      <button className="caregiver-button">👤</button>
+      <Link to="/caretaker" className="caregiver-button">
+        👤
+      </Link>
     </header>
   );
 }
 
-export default Patientheader; 
+export default PatientHeader;
