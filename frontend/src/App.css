@@ -798,3 +798,162 @@
     margin: 0 auto;
   }
 }
+
+/* CARETAKER DASHBOARD */
+
+.caretaker-app {
+  min-height: 100dvh;
+  background-color: #f7faf9;
+}
+
+.caretaker-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 76px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8e6;
+}
+
+.caretaker-header h1 {
+  margin: 0;
+  color: #245c5a;
+  font-size: 26px;
+}
+
+.caretaker-header p {
+  margin: 3px 0 0;
+  color: #71807e;
+  font-size: 14px;
+}
+
+.caretaker-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.caretaker-profile > span {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background-color: #eef7f5;
+  font-size: 20px;
+}
+
+.caretaker-profile strong {
+  display: block;
+  color: #263332;
+}
+
+.caretaker-profile small {
+  color: #71807e;
+}
+
+
+.caretaker-sidebar {
+  position: sticky;
+  top: 76px;
+  height: calc(100dvh - 76px);
+  width: 240px;
+  padding: 28px 18px;
+
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8e6;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.caretaker-sidebar h1 {
+  display: none;
+}
+
+.caretaker-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.caretaker-nav a,
+.caretaker-settings {
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  color: #526462;
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.caretaker-nav a:hover,
+.caretaker-settings:hover {
+  background-color: #eef7f5;
+  color: #245c5a;
+}
+
+.caretaker-settings {
+  margin-top: auto;
+}
+
+.caretaker-main {
+  padding: 40px;
+}
+
+.caretaker-main > h1 {
+  margin: 0;
+  color: #245c5a;
+  font-size: 32px;
+}
+
+.caretaker-main > p {
+  margin-top: 8px;
+  color: #71807e;
+  font-size: 17px;
+}
+.caretaker-nav-link.active {
+  background-color: #eef7f5;
+  color: #245c5a;
+  font-weight: 700;
+}
+.caretaker-nav-link {
+  display: block;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: #526462;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.caretaker-nav-link:hover {
+  background-color: #f3f7f6;
+}
+
+.caretaker-nav-link.active {
+  background-color: #eef7f5;
+  color: #245c5a;
+  font-weight: 700;
+}
+.caretaker-layout {
+  display: block;
+  min-height: 100dvh;
+  background-color: #f5f9f8;
+}
+
+.caretaker-body {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 84px);
+}
