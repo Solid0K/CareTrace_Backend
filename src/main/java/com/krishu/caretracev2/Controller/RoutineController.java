@@ -25,8 +25,8 @@ public class RoutineController {
     }
 
     @GetMapping("/getRoutines/{patientId}")
-    public ResponseEntity<List<RoutineResponse>> getPatientRoutines(@PathVariable String patientId,Authentication authentication){
-        return ResponseEntity.ok(routineService.getPatientsRoutine(patientId,authentication));
+    public ResponseEntity<List<RoutineResponse>> getPatientRoutines(@PathVariable String patientId){
+        return ResponseEntity.ok(routineService.getPatientsRoutine(patientId));
     }
 
     @PutMapping("/updateRoutine/{routineId}/{patientId}")

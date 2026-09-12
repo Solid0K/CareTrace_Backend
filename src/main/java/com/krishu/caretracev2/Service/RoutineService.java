@@ -45,10 +45,7 @@ public class RoutineService {
         return mapToRoutineResponse(savedRoutine);
     }
 
-    public List<RoutineResponse> getPatientsRoutine(String patientId, Authentication authentication){
-        CareTakerPatientPair pair=careTakerAndPatient(authentication,patientId);
-        CareTaker careTaker=pair.getCareTaker();
-        Patient patient=pair.getPatient();
+    public List<RoutineResponse> getPatientsRoutine(String patientId){
         List<Routine> routines=routineRepo.findByPatientId(patientId);
         return routines.stream().map(this::mapToRoutineResponse).toList();
     }
