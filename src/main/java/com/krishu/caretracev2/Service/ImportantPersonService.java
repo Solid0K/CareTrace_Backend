@@ -77,13 +77,13 @@ public class ImportantPersonService {
         return mapToImportantPersonResponse(savedPerson);
     }
 
-    public void deletePerson(String importantPersonId,String patientId,Authentication authentication){
-        CareTaker careTaker=getCareTaker(authentication);
-        Patient patient=patientRepo.findById(patientId).orElseThrow(()->new NotFoundException("Patient not found"));
+    public void deletePerson(String patientId, String importantPersonId, Authentication authentication){
+        CareTaker careTaker = getCareTaker(authentication);
+        Patient patient = patientRepo.findById(patientId).orElseThrow(() -> new NotFoundException("Patient not found"));
         if(!patient.getCareTakerId().equals(careTaker.getId())){
             throw new UnauthorizedException("You are not authorize to access this patient");
         }
-        ImportantPerson person=importantPersonRepo.findById(patientId).orElseThrow(()->new NotFoundException("Person not found"));
+        ImportantPerson person = importantPersonRepo.findById(importantPersonId).orElseThrow(() -> new NotFoundException("Person not found"));
         if(!person.getPatientId().equals(patientId)){
             throw new NotRelatedException("Person and Patient are not related");
         }
