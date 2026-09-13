@@ -9,6 +9,7 @@ import Activities from "./pages/patient/Activities";
 import CaretakerLayout from "./pages/caretaker/CaretakerLayout";
 import CaretakerOverview from "./pages/caretaker/CaretakerOverview";
 import CaretakerSection from "./pages/caretaker/CaretakerSection";
+import PatientDetails from "./pages/caretaker/PatientDetails";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
           <Route path="locations" element={<CaretakerSection title="Locations" description="Manage important patient locations." />} />
           <Route path="safe-zones" element={<CaretakerSection title="Safe Zones" description="Manage patient safe zones." />} />
           <Route path="settings" element={<CaretakerSection title="Settings" description="Update your caregiver account settings." />} />
+          <Route path="/caretaker/patient/:id" element={<PatientDetails />} />
+          
         </Route>
 
       </Routes>
