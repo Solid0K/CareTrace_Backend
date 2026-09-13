@@ -18,6 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PatientService {
 
@@ -84,8 +87,21 @@ public class PatientService {
         return mapToPatientResponse(savedPatient,patientUser);
     }
 
+    public List<PatientResponse> getAllPatient(Authentication authentication) {
+        String careTakerUserId=authentication.getName();
+        CareTaker careTaker=careTakerRepo.findByUserId(careTakerUserId).orElseThrow(()->new NotFoundException("CareTaker not found"));
+        List<Patient> patients=patientRepo.findByCareTakerId(careTaker.getId());
+        List<PatientResponse> responses=new ArrayList<>();
+        for(Patient patient:patients){
+            Client patientUser=userRepo.findById(patient.getUserId()).orElseThrow(()->new NotFoundException("User not found"));
+            responses.add(mapToPatientResponse(patient,patientUser));
+        }
+        return responses;
+    }
+
     private PatientResponse mapToPatientResponse(Patient patient,Client patientUser){
         PatientResponse response=new PatientResponse();
+        response.setId(patient.getId());
         response.setName(patientUser.getName());
         response.setEmail(patientUser.getEmail());
         response.setPassword(patientUser.getPassword());

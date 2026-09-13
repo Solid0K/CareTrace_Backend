@@ -45,7 +45,8 @@ public class ReminderService {
         return mapToReminderResponse(savedReminder);
     }
 
-    public List<ReminderResponse> getPatientReminders(String patientId){
+    public List<ReminderResponse> getPatientReminders(String patientId,Authentication authentication){
+        getAuthorizedPatient(patientId,authentication);
         if(!patientRepo.existsById(patientId)){
             throw new NotFoundException("Patient not found");
         }
@@ -76,6 +77,12 @@ public class ReminderService {
             throw new NotRelatedException("Reminder does not belong to this Patient");
         }
         reminderRepo.delete(reminder);
+    }
+
+    public List<ReminderResponse> getReminderForPatient(Authentication authentication) {
+        String patientUserId=authentication.getName();
+        Patient patient=patientRepo.findByUserId(patientUserId).orElseThrow(()->new NotFoundException("Patient not found"));
+        return reminderRepo.findByPatientId(patient.getId()).stream().map(this::mapToReminderResponse).toList();
     }
 
     private void validateReminder(String patientId, ReminderRequest request){
@@ -117,6 +124,15 @@ public class ReminderService {
         }
         CareTakerPatientPair pair=new CareTakerPatientPair(careTaker,patient);
         return pair;
+    }
+
+    private Patient getAuthorizedPatient(String patientId, Authentication authentication) {
+        CareTaker careTaker = careTakerRepo.findByUserId(authentication.getName()).orElseThrow(() -> new NotFoundException("CareTaker not found"));
+        Patient patient = patientRepo.findById(patientId).orElseThrow(() -> new NotFoundException("Patient not found"));
+        if (!patient.getCareTakerId().equals(careTaker.getId())) {
+            throw new UnauthorizedException("You are not authorized for this patient");
+        }
+        return patient;
     }
 
     private ReminderResponse mapToReminderResponse(Reminder reminder){

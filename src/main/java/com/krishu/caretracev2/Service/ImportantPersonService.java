@@ -90,6 +90,12 @@ public class ImportantPersonService {
         importantPersonRepo.delete(person);
     }
 
+    public List<ImportantPersonResponse> getPatientImportantPerson(Authentication authentication) {
+        String patientUserId=authentication.getName();
+        Patient patient=patientRepo.findByUserId(patientUserId).orElseThrow(()->new NotFoundException("Patient not found"));
+        return importantPersonRepo.findByPatientId(patient.getId()).stream().map(this::mapToImportantPersonResponse).toList();
+    }
+
     private ImportantPersonResponse mapToImportantPersonResponse(ImportantPerson importantPerson){
         ImportantPersonResponse response=new ImportantPersonResponse();
         response.setName(importantPerson.getName());

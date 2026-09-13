@@ -15,10 +15,12 @@ public class PatientLocationService {
 
     private final PatientLocationRepo patientLocationRepo;
     private final PatientRepo patientRepo;
+    private final AlertService alertService;
 
-    public PatientLocationService(PatientLocationRepo patientLocationRepo, PatientRepo patientRepo) {
+    public PatientLocationService(PatientLocationRepo patientLocationRepo, PatientRepo patientRepo, AlertService alertService) {
         this.patientLocationRepo = patientLocationRepo;
         this.patientRepo = patientRepo;
+        this.alertService = alertService;
     }
 
     public PatientLocationResponse updateLocation(String patientId, PatientLocationRequest request){
@@ -32,6 +34,7 @@ public class PatientLocationService {
         location.setLongitude(request.getLongitude());
         location.setUpdatedAt(LocalDateTime.now());
         PatientLocation savedLocation = patientLocationRepo.save(location);
+        alertService.checkGeoFenceAlert(patientId);
         return mapToResponse(savedLocation);
     }
 

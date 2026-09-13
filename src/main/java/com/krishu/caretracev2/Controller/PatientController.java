@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/patient")
 public class PatientController {
@@ -26,6 +28,11 @@ public class PatientController {
     @GetMapping("/getPatient/{patientId}")
     public ResponseEntity<PatientResponse> getPatient(@PathVariable String patientId,Authentication authentication){
         return ResponseEntity.ok(patientService.getPatient(patientId,authentication));
+    }
+
+    @GetMapping("/getAllPatient")
+    public ResponseEntity<List<PatientResponse>> getAllPatient(Authentication authentication){
+        return ResponseEntity.ok(patientService.getAllPatient(authentication));
     }
 
     @PutMapping("/updatePatient/{patientId}")

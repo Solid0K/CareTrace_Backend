@@ -46,4 +46,9 @@ public class ImportantPersonController {
     String importantPersonId,Authentication authentication){
         importantPersonService.deletePerson(patientId,importantPersonId,authentication);
     }
+
+    @GetMapping("/patient/me")
+    public ResponseEntity<List<ImportantPersonResponse>> getImportantPersonForPatient(Authentication authentication){
+        return ResponseEntity.ok(importantPersonService.getPatientImportantPerson(authentication));
+    }
 }

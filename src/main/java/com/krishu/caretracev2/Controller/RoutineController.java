@@ -25,8 +25,8 @@ public class RoutineController {
     }
 
     @GetMapping("/getRoutines/{patientId}")
-    public ResponseEntity<List<RoutineResponse>> getPatientRoutines(@PathVariable String patientId){
-        return ResponseEntity.ok(routineService.getPatientsRoutine(patientId));
+    public ResponseEntity<List<RoutineResponse>> getPatientRoutines(@PathVariable String patientId,Authentication authentication){
+        return ResponseEntity.ok(routineService.getPatientsRoutine(patientId,authentication));
     }
 
     @PutMapping("/updateRoutine/{routineId}/{patientId}")
@@ -38,5 +38,9 @@ public class RoutineController {
     @DeleteMapping("/deleteRoutine/{routineId}/{patientId}")
     public void deleteRoutine(@PathVariable String routineId,@PathVariable String patientId,Authentication authentication){
         routineService.deleteRoutine(routineId,patientId,authentication);
+    }
+
+    public ResponseEntity<List<RoutineResponse>> getRoutineForPatient(Authentication authentication){
+        return ResponseEntity.ok(routineService.getPatientForRoutine(authentication));
     }
 }
