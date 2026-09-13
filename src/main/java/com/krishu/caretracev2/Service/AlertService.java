@@ -7,6 +7,8 @@ import com.krishu.caretracev2.DTO.AlertResponse;
 import com.krishu.caretracev2.DTO.GeoFenceResponse;
 import com.krishu.caretracev2.Model.Alert;
 import com.krishu.caretracev2.Model.CareTaker;
+import com.krishu.caretracev2.Model.Patient;
+import com.krishu.caretracev2.NotificationType;
 import com.krishu.caretracev2.Repository.AlertRepo;
 import com.krishu.caretracev2.Repository.CareTakerRepo;
 import com.krishu.caretracev2.Repository.PatientRepo;
@@ -24,11 +26,15 @@ public class AlertService {
     private final AlertRepo alertRepo;
     private final GeoFencingService geofenceService;
     private final CareTakerRepo careTakerRepo;
+    private final NotificationService notificationService;
+    private final PatientRepo patientRepo;
 
-    public AlertService(AlertRepo alertRepo, GeoFencingService geofenceService, CareTakerRepo careTakerRepo) {
+    public AlertService(AlertRepo alertRepo, GeoFencingService geofenceService, CareTakerRepo careTakerRepo, NotificationService notificationService, PatientRepo patientRepo) {
         this.alertRepo = alertRepo;
         this.geofenceService = geofenceService;
         this.careTakerRepo = careTakerRepo;
+        this.notificationService = notificationService;
+        this.patientRepo = patientRepo;
     }
 
     public AlertResponse checkGeoFenceAlert(String patientId){
@@ -53,6 +59,9 @@ public class AlertService {
         alert.setType(AlertType.GEOFENCE_BREACH);
         alert.setCreatedAt(LocalDateTime.now());
         Alert savedAlert=alertRepo.save(alert);
+        Patient patient=patientRepo.findByUserId(patientId).orElseThrow(()->new NotFoundException("Patient not found"));
+        notificationService.createNotification(patient.getCareTakerId(),patientId,savedAlert.getId(),
+                NotificationType.GEOFENCE_BREACH,"Patient is outside of all safe location");
         return mapToAlertResponse(savedAlert);
     }
 
