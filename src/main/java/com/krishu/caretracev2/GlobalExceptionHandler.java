@@ -1,9 +1,6 @@
 package com.krishu.caretracev2;
 
-import com.krishu.caretracev2.CustomExceptions.NotFoundException;
-import com.krishu.caretracev2.CustomExceptions.NotRelatedException;
-import com.krishu.caretracev2.CustomExceptions.UnauthorizedException;
-import com.krishu.caretracev2.CustomExceptions.UserAlreadyExistsException;
+import com.krishu.caretracev2.CustomExceptions.*;
 import com.krishu.caretracev2.DTO.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +38,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotRelatedException.class)
     public ResponseEntity<ErrorResponse> NotRelated(NotRelatedException exp){
         ErrorResponse errorResponse=new ErrorResponse(409,exp.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(PatientLocationNotKnowException.class)
+    public ResponseEntity<ErrorResponse> PatientLocationNotKnow(PatientLocationNotKnowException exp){
+        ErrorResponse errorResponse=new ErrorResponse(404,exp.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 }

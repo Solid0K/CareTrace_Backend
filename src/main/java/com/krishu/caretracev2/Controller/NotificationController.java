@@ -27,4 +27,14 @@ public class NotificationController {
     public ResponseEntity<Notification> markAsRead(@PathVariable String notificationId, Authentication authentication){
         return ResponseEntity.ok(notificationService.markAsRead(notificationId,authentication));
     }
+
+    @GetMapping("/getNorification/forPatient")
+    public ResponseEntity<List<Notification>> getPatientNotification(Authentication authentication){
+        return ResponseEntity.ok(notificationService.getMyPatientNotification(authentication));
+    }
+
+    @PutMapping("/markAsRead/forPatient/{notificationId}")
+    public ResponseEntity<Notification> markAsReadForPatient(@PathVariable String notificationId,Authentication authentication){
+        return ResponseEntity.ok(notificationService.markAsReadForPatient(notificationId,authentication));
+    }
 }

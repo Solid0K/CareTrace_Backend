@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Setter
@@ -21,4 +22,5 @@ public class Reminder {
     private ReminderType type;
     private String medicationId;
     private String routineId;
+    private LocalDateTime LastTriggeredAt;
 }
