@@ -25,11 +25,11 @@ public class MedicationController {
     }
 
     @GetMapping("/getMedications/{patientId}")
-    public ResponseEntity<List<MedicationResponse>> getPatientMedications(@PathVariable String patientId){
-        return ResponseEntity.ok(medicationService.getPatientMedications(patientId));
+    public ResponseEntity<List<MedicationResponse>> getPatientMedications(@PathVariable String patientId,Authentication authentication){
+        return ResponseEntity.ok(medicationService.getPatientMedications(patientId,authentication));
     }
 
-    @PutMapping("/updateMedication/{patientId}/{medicatioId}")
+    @PutMapping("/updateMedication/{patientId}/{medicationId}")
     public ResponseEntity<MedicationResponse> updateMedication(@RequestBody MedicationRequest request,@PathVariable String medicationId,
                                                                @PathVariable String patientId,Authentication authentication){
         return ResponseEntity.ok(medicationService.updateMedication(request,medicationId,patientId,authentication));
@@ -38,5 +38,10 @@ public class MedicationController {
     @DeleteMapping("/deleteMedication/{medicationId}/{patientId}")
     public void deleteMedication(@PathVariable String medicationId,@PathVariable String patientId,Authentication authentication){
         medicationService.deleteMedication(medicationId,patientId,authentication);
+    }
+
+    @GetMapping("/patient/me")
+    public ResponseEntity<List<MedicationResponse>> getMedicationForPatient(Authentication authentication){
+        return ResponseEntity.ok(medicationService.getMedicationForPatient(authentication));
     }
 }

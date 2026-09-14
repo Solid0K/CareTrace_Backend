@@ -25,8 +25,8 @@ public class ReminderController {
     }
 
     @PostMapping("/getReminders/{patientId}")
-    public ResponseEntity<List<ReminderResponse>> getPatientReminders(@PathVariable String patientId){
-        return ResponseEntity.ok(reminderService.getPatientReminders(patientId));
+    public ResponseEntity<List<ReminderResponse>> getPatientReminders(@PathVariable String patientId,Authentication authentication){
+        return ResponseEntity.ok(reminderService.getPatientReminders(patientId,authentication));
     }
 
     @PutMapping("/updateReminder/{reminderId}/{patient}")
@@ -37,5 +37,10 @@ public class ReminderController {
     @DeleteMapping("/deleteReminder/{reminderId}/{patientId}")
     public void deleteReminder(@PathVariable String reminderId,@PathVariable String patientId,Authentication authentication){
         reminderService.deleteReminder(reminderId,patientId,authentication);
+    }
+
+    @GetMapping("patient/me")
+    public ResponseEntity<List<ReminderResponse>> getReminderForPatient(Authentication authentication){
+        return ResponseEntity.ok(reminderService.getReminderForPatient(authentication));
     }
 }

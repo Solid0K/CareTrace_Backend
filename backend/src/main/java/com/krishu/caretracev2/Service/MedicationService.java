@@ -45,7 +45,8 @@ public class MedicationService {
         return mapToMedicationResponse(savedMedication);
     }
 
-    public List<MedicationResponse> getPatientMedications(String patientId){
+    public List<MedicationResponse> getPatientMedications(String patientId,Authentication authentication){
+        getAuthorizedPatient(patientId,authentication);
         List<Medication> medications=medicationRepo.findByPatientId(patientId);
         return medications.stream().map(this::mapToMedicationResponse).toList();
     }
@@ -79,6 +80,12 @@ public class MedicationService {
         medicationRepo.delete(medication);
     }
 
+    public List<MedicationResponse> getMedicationForPatient(Authentication authentication) {
+        String patientUserId=authentication.getName();
+        Patient patient=patientRepo.findByUserId(patientUserId).orElseThrow(()->new NotFoundException("Patient not found"));
+        return medicationRepo.findByPatientId(patient.getId()).stream().map(this::mapToMedicationResponse).toList();
+    }
+
     private CareTakerPatientPair careTakerAndPatient(Authentication authentication, String patientId){
         CareTaker careTaker=careTakerRepo.findByUserId(authentication.getName()).
                 orElseThrow(()->new NotFoundException("CareTaker not found"));
@@ -88,6 +95,15 @@ public class MedicationService {
         }
         CareTakerPatientPair pair=new CareTakerPatientPair(careTaker,patient);
         return pair;
+    }
+
+    private Patient getAuthorizedPatient(String patientId, Authentication authentication) {
+        CareTaker careTaker = careTakerRepo.findByUserId(authentication.getName()).orElseThrow(() -> new NotFoundException("CareTaker not found"));
+        Patient patient = patientRepo.findById(patientId).orElseThrow(() -> new NotFoundException("Patient not found"));
+        if (!patient.getCareTakerId().equals(careTaker.getId())) {
+            throw new UnauthorizedException("You are not authorized for this patient");
+        }
+        return patient;
     }
 
     private MedicationResponse mapToMedicationResponse(Medication medication){

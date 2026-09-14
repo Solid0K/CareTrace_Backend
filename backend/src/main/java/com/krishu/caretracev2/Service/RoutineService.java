@@ -45,7 +45,8 @@ public class RoutineService {
         return mapToRoutineResponse(savedRoutine);
     }
 
-    public List<RoutineResponse> getPatientsRoutine(String patientId){
+    public List<RoutineResponse> getPatientsRoutine(String patientId,Authentication authentication){
+        getAuthorizedPatient(patientId,authentication);
         List<Routine> routines=routineRepo.findByPatientId(patientId);
         return routines.stream().map(this::mapToRoutineResponse).toList();
     }
@@ -77,6 +78,12 @@ public class RoutineService {
         routineRepo.delete(routine);
     }
 
+    public List<RoutineResponse> getPatientForRoutine(Authentication authentication) {
+        String patientUserId=authentication.getName();
+        Patient patient=patientRepo.findByUserId(patientUserId).orElseThrow(()->new NotFoundException("Patient not found"));
+        return routineRepo.findByPatientId(patient.getId()).stream().map(this::mapToRoutineResponse).toList();
+    }
+
     private CareTakerPatientPair careTakerAndPatient(Authentication authentication, String patientId){
         CareTaker careTaker=careTakerRepo.findByUserId(authentication.getName()).
                 orElseThrow(()->new NotFoundException("CareTaker not found"));
@@ -86,6 +93,15 @@ public class RoutineService {
         }
         CareTakerPatientPair pair=new CareTakerPatientPair(careTaker,patient);
         return pair;
+    }
+
+    private Patient getAuthorizedPatient(String patientId, Authentication authentication) {
+        CareTaker careTaker = careTakerRepo.findByUserId(authentication.getName()).orElseThrow(() -> new NotFoundException("CareTaker not found"));
+        Patient patient = patientRepo.findById(patientId).orElseThrow(() -> new NotFoundException("Patient not found"));
+        if (!patient.getCareTakerId().equals(careTaker.getId())) {
+            throw new UnauthorizedException("You are not authorized for this patient");
+        }
+        return patient;
     }
 
     private RoutineResponse mapToRoutineResponse(Routine routine){
