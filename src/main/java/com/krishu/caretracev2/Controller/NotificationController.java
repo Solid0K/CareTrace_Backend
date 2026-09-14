@@ -28,7 +28,7 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.markAsRead(notificationId,authentication));
     }
 
-    @GetMapping("/getNorification/forPatient")
+    @GetMapping("/getNotification/forPatient")
     public ResponseEntity<List<Notification>> getPatientNotification(Authentication authentication){
         return ResponseEntity.ok(notificationService.getMyPatientNotification(authentication));
     }

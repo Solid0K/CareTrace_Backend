@@ -46,4 +46,10 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse=new ErrorResponse(404,exp.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
+
+    @ExceptionHandler(AlreadyResolvedAlertException.class)
+    public ResponseEntity<ErrorResponse> AlreadyResolvedAlert(AlreadyResolvedAlertException exp){
+        ErrorResponse errorResponse=new ErrorResponse(409,exp.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
 }

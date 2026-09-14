@@ -2,7 +2,9 @@ package com.krishu.caretracev2.Service;
 
 import com.krishu.caretracev2.AlertStatus;
 import com.krishu.caretracev2.AlertType;
+import com.krishu.caretracev2.CustomExceptions.AlreadyResolvedAlertException;
 import com.krishu.caretracev2.CustomExceptions.NotFoundException;
+import com.krishu.caretracev2.CustomExceptions.NotRelatedException;
 import com.krishu.caretracev2.DTO.AlertResponse;
 import com.krishu.caretracev2.DTO.GeoFenceResponse;
 import com.krishu.caretracev2.Model.Alert;
@@ -59,9 +61,27 @@ public class AlertService {
         alert.setType(AlertType.GEOFENCE_BREACH);
         alert.setCreatedAt(LocalDateTime.now());
         Alert savedAlert=alertRepo.save(alert);
-        Patient patient=patientRepo.findByUserId(patientId).orElseThrow(()->new NotFoundException("Patient not found"));
+        Patient patient=patientRepo.findById(patientId).orElseThrow(()->new NotFoundException("Patient not found"));
         notificationService.createNotification(patient.getCareTakerId(),patientId,savedAlert.getId(),
                 NotificationType.GEOFENCE_BREACH,"Patient is outside of all safe location");
+        return mapToAlertResponse(savedAlert);
+    }
+
+    public AlertResponse createSoSAlert(Authentication authentication){
+        Patient patient=patientRepo.findByUserId(authentication.getName()).orElseThrow(()->new NotFoundException("Patient not found"));
+        Optional<Alert> activeAlert=alertRepo.findByPatientIdAndTypeAndStatus(patient.getId(), AlertType.SOS, AlertStatus.ACTIVE);
+        if(activeAlert.isPresent()){
+            return mapToAlertResponse(activeAlert.get());
+        }
+        Alert alert=new Alert();
+        alert.setPatientId(patient.getId());
+        alert.setMessage("Emergency SOS");
+        alert.setStatus(AlertStatus.ACTIVE);
+        alert.setType(AlertType.SOS);
+        alert.setCreatedAt(LocalDateTime.now());
+        Alert savedAlert=alertRepo.save(alert);
+        notificationService.createNotification(patient.getCareTakerId(),patient.getId(),savedAlert.getId(),
+                NotificationType.SOS,"Emergency SOS");
         return mapToAlertResponse(savedAlert);
     }
 
@@ -74,6 +94,22 @@ public class AlertService {
             alerts.addAll(alert);
         }
         return alerts.stream().map(this::mapToAlertResponse).toList();
+    }
+
+    public AlertResponse ResolveSoSAlert(String alertId,Authentication authentication){
+        Alert alert=alertRepo.findById(alertId).orElseThrow(()->new NotFoundException("Alert not found"));
+        CareTaker careTaker=careTakerRepo.findByUserId(authentication.getName()).orElseThrow(()->new NotFoundException("CareTaker not found"));
+        Patient patient=patientRepo.findById(alert.getPatientId()).orElseThrow(()->new NotFoundException("Patient not found"));
+        if(!patient.getCareTakerId().equals(careTaker.getId())){
+            throw new NotRelatedException("This alert is not from your patient so you cant resolve it");
+        }
+        if(alert.getStatus()==AlertStatus.RESOLVED){
+            throw new AlreadyResolvedAlertException("Alert is already Resolved");
+        }
+        alert.setStatus(AlertStatus.RESOLVED);
+        alert.setResolvedAt(LocalDateTime.now());
+        Alert savedAlert=alertRepo.save(alert);
+        return mapToAlertResponse(savedAlert);
     }
 
     private AlertResponse mapToAlertResponse(Alert alert){

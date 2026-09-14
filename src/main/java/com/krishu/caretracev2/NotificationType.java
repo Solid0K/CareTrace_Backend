@@ -3,6 +3,7 @@ package com.krishu.caretracev2;
 public enum NotificationType {
     GEOFENCE_BREACH,
     GEOFENCE_RESOLVED,
+    SOS,
 
     MEDICATION_REMINDER,
     ROUTINE_REMINDER,

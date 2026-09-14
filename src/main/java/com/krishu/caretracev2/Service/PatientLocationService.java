@@ -71,12 +71,11 @@ public class PatientLocationService {
         return response;
     }
 
-    private Patient getAuthorizedPatient(String patientId, Authentication authentication) {
+    private void getAuthorizedPatient(String patientId, Authentication authentication) {
         CareTaker careTaker = careTakerRepo.findByUserId(authentication.getName()).orElseThrow(() -> new NotFoundException("CareTaker not found"));
         Patient patient = patientRepo.findById(patientId).orElseThrow(() -> new NotFoundException("Patient not found"));
         if (!patient.getCareTakerId().equals(careTaker.getId())) {
             throw new UnauthorizedException("You are not authorized for this patient");
         }
-        return patient;
     }
 }
