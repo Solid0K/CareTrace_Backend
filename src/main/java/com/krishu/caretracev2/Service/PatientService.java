@@ -99,6 +99,12 @@ public class PatientService {
         return responses;
     }
 
+    public PatientResponse getPatientOwnInfo(Authentication authentication) {
+        Patient patient=patientRepo.findByUserId(authentication.getName()).orElseThrow(()->new NotFoundException("Patient not found"));
+        Client patientUser=userRepo.findById(patient.getUserId()).orElseThrow(()->new NotFoundException("User not found"));
+        return mapToPatientResponse(patient,patientUser);
+    }
+
     private PatientResponse mapToPatientResponse(Patient patient,Client patientUser){
         PatientResponse response=new PatientResponse();
         response.setId(patient.getId());

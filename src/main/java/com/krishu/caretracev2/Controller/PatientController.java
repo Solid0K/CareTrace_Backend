@@ -39,4 +39,9 @@ public class PatientController {
     public ResponseEntity<PatientResponse> updatePatient(@PathVariable String patientId,@RequestBody PatientUpdateRequest request, Authentication authentication){
         return ResponseEntity.ok(patientService.updatePatient(patientId,request,authentication));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<PatientResponse> patientOwnInfo(Authentication authentication){
+        return ResponseEntity.ok(patientService.getPatientOwnInfo(authentication));
+    }
 }
